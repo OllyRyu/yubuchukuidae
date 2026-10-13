@@ -1,0 +1,445 @@
+<title>유부축의대</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: 한 줄 세로 흐름. 첫 화면은 왼쪽 약속 문구 + 오른쪽 '두 쌍의 유부' 축의대 그림. 아래로 이유 → 기록 → 당일 순서 → 사고 대응 → 영상 원칙 → 질문 → 상담 */
+:root {
+  --bg: #f8f7f3;        /* 봉투 종이 */
+  --surface: #ffffff;
+  --ink: #1d2433;       /* 먹색 남색 */
+  --muted: #5d6474;
+  --line: #e3e0d6;
+  --yubu: #b8762b;      /* 유부 껍질 */
+  --yubu-soft: #f3e3c8;
+  --rice: #ffffff;
+  --cheong: #2c4a7a;    /* 청실 */
+  --hong: #b5434b;      /* 홍실 */
+  --font-display: "Jua", "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Consolas", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15181f; --surface: #1d212b; --ink: #ece9e1; --muted: #a3a8b4; --line: #2e3340;
+    --yubu: #d9984d; --yubu-soft: #3a2e1f; --rice: #f4f1ea; --cheong: #8fb0e3; --hong: #e48a8f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15181f; --surface: #1d212b; --ink: #ece9e1; --muted: #a3a8b4; --line: #2e3340;
+  --yubu: #d9984d; --yubu-soft: #3a2e1f; --rice: #f4f1ea; --cheong: #8fb0e3; --hong: #e48a8f;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.7;
+  word-break: keep-all;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding-inline: 20px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--yubu); outline-offset: 3px; border-radius: 4px; }
+
+/* 머리 */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 18px; }
+.mark { font-family: var(--font-display); font-size: 1.6rem; letter-spacing: .01em; display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.mark i { display: inline-block; width: 26px; height: 18px; border-radius: 9px 9px 7px 7px; background: var(--yubu); position: relative; }
+.mark i::after { content: ""; position: absolute; left: 4px; right: 4px; top: 3px; height: 6px; border-radius: 4px; background: var(--rice); }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; border: 0; cursor: pointer;
+  background: var(--ink); color: var(--bg); font: 500 .95rem/1 var(--font-body);
+  padding: 13px 20px; border-radius: 999px; text-decoration: none;
+}
+.btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+
+/* 첫 화면 */
+.hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; padding-block: 40px 72px; }
+.hero > * { min-width: 0; }
+.eyebrow { font-size: .85rem; font-weight: 700; letter-spacing: .08em; color: var(--yubu); }
+.hero h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(3rem, 8vw, 5.4rem); line-height: 1.05; margin-block: 14px 22px; }
+.hero h1 em { font-style: normal; color: var(--yubu); }
+.lead { font-size: 1.12rem; color: var(--ink); max-width: 30em; }
+.lead + .lead { color: var(--muted); margin-top: 10px; font-size: 1rem; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+
+.stage { display: grid; gap: 14px; }
+.stage svg { width: 100%; height: auto; display: block; }
+
+/* 공통 구획 */
+section.block { padding-block: 72px; border-top: 1px solid var(--line); }
+.sec-head { display: grid; gap: 10px; margin-bottom: 36px; max-width: 40em; }
+.sec-head h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.9rem, 4.4vw, 2.6rem); line-height: 1.2; }
+.sec-head p { color: var(--muted); }
+
+/* 왜 유부 */
+.why { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.why > div { min-width: 0; display: grid; gap: 8px; align-content: start; }
+.why h3 { font-size: 1.15rem; }
+.why p { color: var(--muted); }
+.why .tag { font-family: var(--font-display); font-size: 2.2rem; color: var(--yubu); line-height: 1; }
+
+/* 기록 */
+.record { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.record > * { min-width: 0; }
+.points { display: grid; gap: 22px; }
+.points div { display: grid; gap: 4px; padding-left: 16px; border-left: 3px solid var(--yubu-soft); }
+.points b { font-size: 1.05rem; }
+.points span { color: var(--muted); }
+.sheet { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.sheet-top { display: flex; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); font-size: .85rem; }
+.sheet-top span { color: var(--muted); }
+.sheet .scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; font-variant-numeric: tabular-nums; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-weight: 500; color: var(--muted); font-size: .76rem; letter-spacing: .04em; }
+td.num, th.num { text-align: right; }
+td.mono { font-family: var(--font-mono); }
+tr:last-child td { border-bottom: 0; }
+.sheet-foot { padding: 12px 18px; font-size: .78rem; color: var(--muted); background: var(--bg); border-top: 1px solid var(--line); }
+
+/* 당일 순서 */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; counter-reset: s; }
+.steps li { min-width: 0; counter-increment: s; padding: 0 18px 0 0; display: grid; gap: 6px; align-content: start; position: relative; }
+.steps li::before {
+  content: counter(s); font-family: var(--font-display); font-size: 1.1rem;
+  width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--yubu); color: var(--rice); position: relative; z-index: 1;
+}
+.steps li::after { content: ""; position: absolute; top: 19px; left: 38px; right: 0; height: 2px; background: var(--yubu-soft); }
+.steps li:last-child::after { display: none; }
+.steps .when { font-family: var(--font-mono); font-size: .78rem; color: var(--yubu); margin-top: 8px; }
+.steps b { font-size: 1.02rem; }
+.steps span { color: var(--muted); font-size: .92rem; }
+
+/* 사고 대응 */
+.cases { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.case { min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: grid; gap: 10px; }
+.case .q { font-weight: 700; font-size: 1.05rem; }
+.case .q::before { content: "“"; color: var(--hong); font-family: var(--font-display); margin-right: 2px; }
+.case .q::after { content: "”"; color: var(--hong); font-family: var(--font-display); margin-left: 2px; }
+.case p { color: var(--muted); }
+.case .a { color: var(--ink); }
+
+/* 영상 원칙 */
+.policy { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--surface); }
+.policy > div { min-width: 0; padding: 22px; display: grid; gap: 6px; align-content: start; border-right: 1px solid var(--line); }
+.policy > div:last-child { border-right: 0; }
+.policy .big { font-family: var(--font-display); font-size: 2rem; color: var(--cheong); line-height: 1.1; }
+.policy b { font-size: 1rem; }
+.policy span { color: var(--muted); font-size: .92rem; }
+.notice {
+  margin-top: 22px; border: 1.5px dashed var(--line); border-radius: 14px; padding: 18px 20px;
+  display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center;
+}
+.notice .lbl { font-size: .75rem; letter-spacing: .08em; font-weight: 700; color: var(--hong); writing-mode: horizontal-tb; }
+.notice p { font-size: .95rem; }
+
+/* 질문 */
+.faq { display: grid; gap: 10px; max-width: 760px; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 20px; }
+summary { cursor: pointer; list-style: none; padding-block: 16px; font-weight: 500; display: flex; justify-content: space-between; gap: 16px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; color: var(--yubu); font-size: 1.3rem; line-height: 1; }
+details[open] summary::after { content: "−"; }
+details p { color: var(--muted); padding-bottom: 18px; }
+
+/* 상담 */
+.contact { background: var(--ink); color: var(--bg); border-radius: 24px; padding: 44px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: center; }
+.contact > * { min-width: 0; }
+.contact h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.2; }
+.contact p { opacity: .8; margin-top: 10px; }
+.contact form { display: grid; gap: 10px; }
+.contact label { font-size: .8rem; opacity: .75; display: block; margin-bottom: 4px; }
+.contact .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.contact .pair > div { min-width: 0; }
+@media (max-width: 400px) { .contact .pair { grid-template-columns: 1fr; } }
+.contact input {
+  width: 100%; font: inherit; padding: 12px 14px; border-radius: 10px; border: 0;
+  background: var(--bg); color: var(--ink);
+}
+.contact .btn { background: var(--yubu); color: var(--rice); justify-content: center; margin-top: 6px; }
+.done { font-size: .9rem; color: var(--yubu-soft); }
+footer { padding-block: 36px 48px; color: var(--muted); font-size: .85rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+
+@media (max-width: 900px) {
+  .hero, .record, .contact { grid-template-columns: 1fr; }
+  .hero { gap: 28px; padding-block: 16px 56px; }
+  .why { grid-template-columns: 1fr; gap: 26px; }
+  .steps { grid-template-columns: 1fr; gap: 22px; }
+  .steps li { grid-template-columns: 38px 1fr; column-gap: 14px; padding: 0; }
+  .steps li::before { grid-row: span 3; }
+  .steps li::after { top: 38px; bottom: -22px; left: 18px; right: auto; width: 2px; height: auto; }
+  .steps .when { margin-top: 0; }
+  .cases { grid-template-columns: 1fr; }
+  .policy { grid-template-columns: 1fr 1fr; }
+  .policy > div:nth-child(2) { border-right: 0; }
+  .policy > div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .contact { padding: 28px 22px; }
+  section.block { padding-block: 56px; }
+}
+@media (max-width: 480px) {
+  .policy { grid-template-columns: 1fr; }
+  .policy > div { border-right: 0; border-bottom: 1px solid var(--line); }
+  .policy > div:last-child { border-bottom: 0; }
+  .notice { grid-template-columns: 1fr; gap: 6px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .yubu-bob { animation: bob 3.2s ease-in-out infinite; transform-origin: center bottom; transform-box: fill-box; }
+  .yubu-bob.d2 { animation-delay: .4s; } .yubu-bob.d3 { animation-delay: .8s; } .yubu-bob.d4 { animation-delay: 1.2s; }
+}
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <a class="mark" href="#top" id="top"><i aria-hidden="true"></i>유부축의대</a>
+    <a class="btn ghost" href="#contact">상담 신청</a>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">결혼한 두 쌍의 부부가 지키는 축의대</div>
+      <h1>축의금은<br><em>유부</em>가 지킵니다</h1>
+      <p class="lead">유부축의대는 실제 결혼한 두 쌍의 부부가 나란히 앉아 축의대를 직접 맡는 서비스입니다.</p>
+      <p class="lead">아르바이트는 쓰지 않습니다. 매번 같은 네 사람이 나가고, 봉투를 받는 순간부터 혼주께 전해 드릴 때까지 손이 보이게 촬영합니다.</p>
+      <div class="cta">
+        <a class="btn" href="#contact">예식일 상담하기</a>
+        <a class="btn ghost" href="#record">어떻게 기록하나요</a>
+      </div>
+    </div>
+
+    <div class="stage">
+      <svg viewBox="0 0 520 300" role="img" aria-label="축의대에 나란히 앉은 두 쌍의 유부 부부">
+        <!-- 축의대 안내판 -->
+        <rect x="190" y="24" width="140" height="40" rx="8" fill="var(--surface)" stroke="var(--line)"/>
+        <text x="260" y="50" text-anchor="middle" font-family="Jua, sans-serif" font-size="17" fill="var(--ink)">축의대 · 접수처</text>
+        <!-- 신랑측 한 쌍 -->
+        <g>
+          <g class="yubu-bob"><rect x="48" y="104" width="86" height="78" rx="30" fill="var(--yubu)"/><rect x="58" y="112" width="66" height="26" rx="13" fill="var(--rice)"/><circle cx="78" cy="152" r="3.5" fill="var(--ink)"/><circle cx="104" cy="152" r="3.5" fill="var(--ink)"/><path d="M84 162 q7 6 14 0" stroke="var(--ink)" stroke-width="2.5" fill="none" stroke-linecap="round"/></g>
+          <g class="yubu-bob d2"><rect x="146" y="110" width="80" height="72" rx="28" fill="var(--yubu)"/><rect x="155" y="118" width="62" height="24" rx="12" fill="var(--rice)"/><circle cx="174" cy="155" r="3.5" fill="var(--ink)"/><circle cx="198" cy="155" r="3.5" fill="var(--ink)"/><path d="M180 164 q6 5 12 0" stroke="var(--ink)" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="166" cy="164" r="5" fill="var(--hong)" opacity=".35"/><circle cx="206" cy="164" r="5" fill="var(--hong)" opacity=".35"/></g>
+          <path d="M136 98 c-3-6 4-10 7-5 c3-5 10-1 7 5 l-7 7z" fill="var(--hong)"/>
+        </g>
+        <!-- 신부측 한 쌍 -->
+        <g>
+          <g class="yubu-bob d3"><rect x="294" y="104" width="86" height="78" rx="30" fill="var(--yubu)"/><rect x="304" y="112" width="66" height="26" rx="13" fill="var(--rice)"/><circle cx="324" cy="152" r="3.5" fill="var(--ink)"/><circle cx="350" cy="152" r="3.5" fill="var(--ink)"/><path d="M330 162 q7 6 14 0" stroke="var(--ink)" stroke-width="2.5" fill="none" stroke-linecap="round"/></g>
+          <g class="yubu-bob d4"><rect x="392" y="110" width="80" height="72" rx="28" fill="var(--yubu)"/><rect x="401" y="118" width="62" height="24" rx="12" fill="var(--rice)"/><circle cx="420" cy="155" r="3.5" fill="var(--ink)"/><circle cx="444" cy="155" r="3.5" fill="var(--ink)"/><path d="M426 164 q6 5 12 0" stroke="var(--ink)" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="412" cy="164" r="5" fill="var(--hong)" opacity=".35"/><circle cx="452" cy="164" r="5" fill="var(--hong)" opacity=".35"/></g>
+          <path d="M382 98 c-3-6 4-10 7-5 c3-5 10-1 7 5 l-7 7z" fill="var(--hong)"/>
+        </g>
+        <!-- 테이블 -->
+        <rect x="20" y="180" width="480" height="20" rx="6" fill="var(--ink)"/>
+        <rect x="34" y="200" width="452" height="74" fill="var(--surface)" stroke="var(--line)"/>
+        <rect x="34" y="200" width="226" height="74" fill="var(--cheong)" opacity=".12"/>
+        <rect x="260" y="200" width="226" height="74" fill="var(--hong)" opacity=".12"/>
+        <text x="147" y="244" text-anchor="middle" font-family="Jua, sans-serif" font-size="20" fill="var(--cheong)">신랑측</text>
+        <text x="373" y="244" text-anchor="middle" font-family="Jua, sans-serif" font-size="20" fill="var(--hong)">신부측</text>
+        <!-- 봉투와 카메라 -->
+        <rect x="100" y="166" width="34" height="20" rx="2" fill="var(--rice)" stroke="var(--line)"/>
+        <path d="M100 167 l17 10 l17 -10" stroke="var(--line)" fill="none"/>
+        <rect x="236" y="160" width="48" height="26" rx="5" fill="var(--ink)"/>
+        <circle cx="260" cy="173" r="8" fill="var(--surface)"/><circle cx="260" cy="173" r="4" fill="var(--ink)"/>
+        <circle cx="277" cy="165" r="2.5" fill="var(--hong)"/>
+      </svg>    </div>
+  </section>
+
+  <section class="block">
+    <div class="sec-head">
+      <div class="eyebrow">왜 유부인가</div>
+      <h2>해 본 사람이 그날을 압니다</h2>
+      <p>축의대는 큰돈이 오가고 사람이 몰리는 자리입니다. 그래서 보통은 가족이나 아주 가까운 친구에게만 맡기지요. 유부축의대는 그 자리를 결혼식을 먼저 치러 본 부부가 맡습니다.</p>
+    </div>
+    <div class="why">
+      <div>
+        <span class="tag">먼저 해 본</span>
+        <h3>결혼식을 치러 본 부부</h3>
+        <p>식권이 모자라는 순간, 어르신이 봉투를 들고 헤매는 순간, 혼주께서 하객 맞이로 바쁜 순간을 직접 겪어 봤습니다.</p>
+      </div>
+      <div>
+        <span class="tag">늘 같은</span>
+        <h3>매번 같은 네 사람</h3>
+        <p>예약할 때 만난 부부가 당일에도 그대로 나갑니다. 처음 보는 아르바이트가 앉는 일은 없습니다.</p>
+      </div>
+      <div>
+        <span class="tag">둘씩 확인</span>
+        <h3>한 쌍에 두 손</h3>
+        <p>신랑측과 신부측에 한 쌍씩 나란히 앉습니다. 한 사람이 받고 안내하면 다른 한 사람이 열어 세고 적습니다. 모든 봉투를 두 사람이 봅니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="record">
+    <div class="sec-head">
+      <div class="eyebrow">기록 방식</div>
+      <h2>봉투 하나하나가 영상과 장부에 남습니다</h2>
+      <p>기록은 나중에 생길 수 있는 오해를 풀기 위한 증거입니다. 봉투가 비어 있었는지, 돌려 달라는 분께 정말 더 받았는지, 영상과 장부로 확인해 드립니다.</p>
+    </div>
+    <div class="record">
+      <div class="points">
+        <div><b>손이 보이는 1인칭 촬영</b><span>봉투를 여는 사람이 액션캠을 몸에 달고, 처음부터 끝까지 끊지 않고 찍습니다.</span></div>
+        <div><b>테이블 전체를 비추는 고정 카메라</b><span>액션캠이 놓치는 쪽은 고정 카메라가 함께 담습니다. 카메라 두 대로 사각지대를 없앱니다.</span></div>
+        <div><b>봉투 번호 스티커</b><span>받는 즉시 번호를 붙이고, 번호가 카메라에 보이게 열어서 셉니다.</span></div>
+        <div><b>예식 중에도 폰으로 확인</b><span>장부는 실시간으로 채워집니다. 신랑신부와 혼주께서 원하시면 예식 중에도 보실 수 있습니다.</span></div>
+      </div>
+      <div class="sheet">
+        <div class="sheet-top"><b>신랑측 장부</b><span>예시 · 2026년 10월 25일 낮 12시 예식</span></div>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>번호</th><th>성함</th><th>관계</th><th class="num">금액</th><th class="num">식권</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">011</td><td>박○○</td><td>회사</td><td class="num mono">50,000</td><td class="num">1</td></tr>
+              <tr><td class="mono">012</td><td>최○○</td><td>친구</td><td class="num mono">100,000</td><td class="num">1</td></tr>
+              <tr><td class="mono">013</td><td>김○○</td><td>친척</td><td class="num mono">100,000</td><td class="num">2</td></tr>
+              <tr><td class="mono">014</td><td>이○○ 외 1</td><td>친구</td><td class="num mono">200,000</td><td class="num">2</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sheet-foot">예식이 끝나면 엑셀 장부와 정산서를 그날 바로 보내 드립니다. 양가 장부는 각 측에만 전해 드립니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="sec-head">
+      <div class="eyebrow">예식 당일</div>
+      <h2>도착부터 인계까지, 이렇게 진행합니다</h2>
+    </div>
+    <ol class="steps">
+      <li><span class="when">예식 1시간 30분 전</span><b>도착과 준비</b><span>식권을 받고 혼주 성함을 확인합니다. 안내판과 카메라를 설치하고 녹화를 시작합니다.</span></li>
+      <li><span class="when">접수 중</span><b>받고, 세고, 적기</b><span>봉투에 번호를 붙여 카메라 앞에서 열고 장부에 적습니다. 식권은 확인한 뒤에 드립니다.</span></li>
+      <li><span class="when">예식 시작 후</span><b>두 번 세는 정산</b><span>두 사람이 따로 세어 맞춰 보고 100장 단위로 묶어 보안봉투에 봉인합니다.</span></li>
+      <li><span class="when">예식 15~20분 후</span><b>서명하고 인계</b><span>정산서 두 부에 양쪽이 서명하고, 지정하신 분께 직접 전해 드립니다.</span></li>
+      <li><span class="when">인계 뒤</span><b>끝까지 지키기</b><span>가족사진을 찍는 동안 축의금 가방이 혼자 남지 않도록 한 명이 곁에 있습니다.</span></li>
+    </ol>
+  </section>
+
+  <section class="block">
+    <div class="sec-head">
+      <div class="eyebrow">이런 일, 이렇게 막습니다</div>
+      <h2>예식장에서 실제로 일어난 일들입니다</h2>
+      <p>혼주나 친척을 사칭해 봉투를 받아 가는 일은 실제 판결까지 나온 수법입니다. 유부축의대는 이런 상황마다 정해 둔 대응이 있습니다.</p>
+    </div>
+    <div class="cases">
+      <div class="case"><div class="q">혼주 친척인데 봉투는 제가 받을게요</div><p class="a">봉투는 축의대에서만 받습니다. 명찰과 안내판으로 공식 접수처를 알리고, 혼주께 직접 확인하기 전에는 누구에게도 넘기지 않습니다.</p></div>
+      <div class="case"><div class="q">10만 원 넣으려다 20만 원 넣었어요, 돌려주세요</div><p class="a">그 자리에서 현금을 내드리지 않습니다. 성함과 연락처를 받아 두고, 영상과 장부로 확인한 뒤 신랑신부께서 처리하시도록 전해 드립니다.</p></div>
+      <div class="case"><div class="q">아까 냈어요, 식권 하나만 더 주세요</div><p class="a">식권은 장부에 적힌 수만큼만 드립니다. 이미 받으셨는지는 장부와 영상으로 바로 확인합니다.</p></div>
+      <div class="case"><div class="q">예식장 직원인데 식대 중간정산 하실게요</div><p class="a">예식 중에는 어떤 정산도 하지 않습니다. 축의금은 예식이 끝난 뒤 정해진 분께만 인계합니다.</p></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="sec-head">
+      <div class="eyebrow">영상은 이렇게 다룹니다</div>
+      <h2>찍는 만큼 지우는 것도 약속합니다</h2>
+      <p>영상에는 하객분들의 모습도 담깁니다. 그래서 보관 기간과 쓰임새를 정해 두고 지킵니다.</p>
+    </div>
+    <div class="policy">
+      <div><span class="big">30일</span><b>보관 기간</b><span>예식 뒤 30일 동안 보관하고, 기간이 끝나면 되살릴 수 없게 지운 뒤 알려 드립니다.</span></div>
+      <div><span class="big">구간 확인</span><b>기본 제공</b><span>궁금한 봉투가 있으면 번호나 성함을 알려 주세요. 영상에서 그 장면을 찾아 보여 드립니다.</span></div>
+      <div><span class="big">풀영상</span><b>신청하신 분께</b><span>기간이 정해진 비공개 링크로 보내 드립니다. 다른 곳에 올리거나 나누지 않는 조건입니다.</span></div>
+      <div><span class="big">녹음 없음</span><b>소리는 담지 않습니다</b><span>하객분들의 대화는 녹음하지 않습니다. 신랑신부께서 동의하시지 않은 영상은 인스타그램·유튜브 홍보에 쓰지 않습니다.</span></div>
+    </div>
+    <div class="notice">
+      <span class="lbl">축의대 안내판</span>
+      <p>축의금 접수 확인을 위해 이 자리를 촬영하고 있습니다. 소리는 녹음하지 않으며, 영상은 예식 후 30일 뒤 삭제합니다. 촬영을 원하지 않으시면 말씀해 주세요.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="sec-head">
+      <div class="eyebrow">자주 묻는 질문</div>
+      <h2>예약 전에 많이 물어보세요</h2>
+    </div>
+    <div class="faq">
+      <details><summary>모르는 사람이 앉아 있으면 하객분들이 어색해하지 않을까요?</summary><p>저희도 결혼식에서 하객을 맞아 본 부부입니다. 혼주를 대신해 인사드리고, 어르신 동선과 식권 안내까지 챙깁니다. 원하시면 청첩장에 "축의대는 유부축의대가 함께합니다" 안내 문구를 넣어 드립니다.</p></details>
+      <details><summary>한쪽 축의대만 맡길 수도 있나요?</summary><p>기본은 양가에 한 쌍씩, 두 쌍이 나란히 앉는 구성입니다. 한쪽만 필요하시면 상담 때 말씀해 주세요.</p></details>
+      <details><summary>웨딩홀에서 카메라를 설치해도 되나요?</summary><p>홀마다 규정이 달라서 예약하실 때 저희가 먼저 확인합니다. 고정 카메라를 둘 수 없는 홀이면 액션캠 위주로 진행 방식을 다시 안내해 드립니다.</p></details>
+      <details><summary>계좌로 보낸 축의금도 장부에 넣을 수 있나요?</summary><p>송금 내역을 주시면 현금 장부와 합쳐 하나의 엑셀로 정리해 드립니다.</p></details>
+      <details><summary>봉투를 열지 않고 그대로 받을 수도 있나요?</summary><p>네. 봉투째 봉인해서 전해 드리는 방식도 있습니다. 이때는 현금을 세지 않고 봉투 번호와 성함만 기록합니다.</p></details>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="contact">
+      <div>
+        <h2>예식일을 알려 주시면<br>두 쌍의 일정을 먼저 맞춰 둘게요</h2>
+        <p>가격은 예상 하객 수와 예식장 위치에 따라 상담할 때 안내해 드립니다. 하루에 맡는 예식 수가 정해져 있어 일찍 문의하실수록 좋습니다.</p>
+      </div>
+      <form id="ask" novalidate>
+        <div class="pair">
+          <div><label for="f-date">예식일</label><input id="f-date" type="date" value="2026-12-12"></div>
+          <div><label for="f-time">예식 시간</label><input id="f-time" type="time" value="12:00" step="600"></div>
+        </div>
+        <div class="pair">
+          <div><label for="f-hall">예식장</label><input id="f-hall" type="text" placeholder="예: ○○웨딩컨벤션 강남점"></div>
+          <div><label for="f-room">홀 이름</label><input id="f-room" type="text" placeholder="예: 그랜드볼룸 3층"></div>
+        </div>
+        <label for="f-tel">연락처</label>
+        <input id="f-tel" type="tel" placeholder="010-0000-0000">
+        <button class="btn" type="submit">상담 신청</button>
+        <p class="done" id="done" hidden></p>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <span>유부축의대 · 결혼한 두 쌍의 부부가 지키는 축의대</span>
+    <span>인스타그램 · 유튜브 준비 중 · 사업자 정보 준비 중</span>
+  </footer>
+</div>
+
+<script>
+// 상담 신청 → FormSubmit 으로 두 주소에 메일 (첫 신청 때 ollyryu@gmail.com 으로 오는 활성화 메일을 한 번 눌러야 이후부터 전달됨)
+var MAIL_TO = 'ollyryu@gmail.com';
+var MAIL_CC = 'soyn0405@naver.com';
+
+document.getElementById('ask').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var form = e.target;
+  var done = document.getElementById('done');
+  var btn = form.querySelector('button[type="submit"]');
+  var val = function (id) { return document.getElementById(id).value.trim(); };
+
+  var date = val('f-date'), time = val('f-time'), hall = val('f-hall'), room = val('f-room'), tel = val('f-tel');
+  if (!date || !time || !hall || !room || !tel) {
+    done.textContent = '예식일, 예식 시간, 예식장, 홀 이름, 연락처를 모두 적어 주세요.';
+    done.hidden = false;
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '보내는 중…';
+  done.hidden = true;
+
+  fetch('https://formsubmit.co/ajax/' + MAIL_TO, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      _subject: '[유부축의대 상담 신청] ' + date + ' ' + time + ' ' + hall + ' ' + room,
+      _cc: MAIL_CC,
+      _template: 'table',
+      _captcha: 'false',
+      '예식일': date,
+      '예식 시간': time,
+      '예식장': hall,
+      '홀 이름': room,
+      '연락처': tel
+    })
+  })
+    .then(function (r) { return r.json().then(function (j) { if (!r.ok || String(j.success) !== 'true') throw new Error(j.message || r.status); }); })
+    .then(function () {
+      done.textContent = '상담 신청이 접수됐습니다. 적어 주신 연락처로 곧 연락드릴게요.';
+      form.reset();
+    })
+    .catch(function () {
+      done.textContent = '신청을 보내지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.';
+    })
+    .finally(function () {
+      done.hidden = false;
+      btn.disabled = false;
+      btn.textContent = '상담 신청';
+    });
+});
+</script>
