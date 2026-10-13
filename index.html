@@ -428,13 +428,25 @@ document.getElementById('ask').addEventListener('submit', function (e) {
       '연락처': tel
     })
   })
-    .then(function (r) { return r.json().then(function (j) { if (!r.ok || String(j.success) !== 'true') throw new Error(j.message || r.status); }); })
+    .then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok || String(j.success) !== 'true') throw new Error(j.message || ('HTTP ' + r.status));
+      });
+    })
     .then(function () {
       done.textContent = '상담 신청이 접수됐습니다. 적어 주신 연락처로 곧 연락드릴게요.';
       form.reset();
     })
-    .catch(function () {
-      done.textContent = '신청을 보내지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.';
+    .catch(function (err) {
+      var msg = String(err && err.message || '');
+      if (/activat/i.test(msg)) {
+        // FormSubmit 첫 사용: 받는 주소로 활성화 메일을 보냈다는 응답
+        done.textContent = '메일 받기 설정이 아직 안 됐습니다. ' + MAIL_TO + ' 메일함(스팸함 포함)에서 FormSubmit 의 "Activate Form" 을 누른 뒤 다시 신청해 주세요.';
+      } else if (location.protocol === 'file:') {
+        done.textContent = '내 PC에서 파일로 연 화면에서는 보낼 수 없습니다. 웹 주소로 열어서 신청해 주세요.';
+      } else {
+        done.textContent = '신청을 보내지 못했습니다. 잠시 뒤 다시 눌러 주세요. (' + msg + ')';
+      }
     })
     .finally(function () {
       done.hidden = false;
