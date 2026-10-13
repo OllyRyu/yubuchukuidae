@@ -394,6 +394,21 @@ footer { padding-block: 36px 48px; color: var(--muted); font-size: .85rem; displ
 // 상담 신청 → FormSubmit 으로 두 주소에 메일 (첫 신청 때 ollyryu@gmail.com 으로 오는 활성화 메일을 한 번 눌러야 이후부터 전달됨)
 var MAIL_TO = 'ollyryu@gmail.com';
 var MAIL_CC = 'soyn0405@naver.com';
+var SENT_KEY = 'yubu-sent';
+var sentMemory = [];   // 저장소가 막힌 브라우저용 (새로고침 전까지만)
+
+function sentSigs() {
+  try { return JSON.parse(localStorage.getItem(SENT_KEY) || '[]').concat(sentMemory); }
+  catch (e) { return sentMemory; }
+}
+function rememberSig(sig) {
+  sentMemory.push(sig);
+  try {
+    var list = JSON.parse(localStorage.getItem(SENT_KEY) || '[]');
+    list.push(sig);
+    localStorage.setItem(SENT_KEY, JSON.stringify(list.slice(-20)));
+  } catch (e) {}
+}
 
 document.getElementById('ask').addEventListener('submit', function (e) {
   e.preventDefault();
@@ -405,6 +420,14 @@ document.getElementById('ask').addEventListener('submit', function (e) {
   var date = val('f-date'), time = val('f-time'), hall = val('f-hall'), room = val('f-room'), tel = val('f-tel');
   if (!date || !time || !hall || !room || !tel) {
     done.textContent = '예식일, 예식 시간, 예식장, 홀 이름, 연락처를 모두 적어 주세요.';
+    done.hidden = false;
+    return;
+  }
+
+  // 같은 내용 재신청 막기: 보낸 내용을 이 브라우저에만 기억 (DB 없음, 다른 기기·브라우저에선 모름)
+  var sig = [date, time, hall, room, tel.replace(/\D/g, '')].join('|');
+  if (sentSigs().indexOf(sig) !== -1) {
+    done.textContent = '이미 신청하셨습니다. 적어 주신 연락처로 곧 연락드릴게요.';
     done.hidden = false;
     return;
   }
@@ -434,6 +457,7 @@ document.getElementById('ask').addEventListener('submit', function (e) {
       });
     })
     .then(function () {
+      rememberSig(sig);
       done.textContent = '상담 신청이 접수됐습니다. 적어 주신 연락처로 곧 연락드릴게요.';
     })
     .catch(function (err) {
