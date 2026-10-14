@@ -67,7 +67,8 @@ a { color: inherit; }
 
 /* 머리 */
 .top-bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
-.top { display: flex; align-items: center; gap: 24px; padding-block: 14px; }
+.top { display: flex; align-items: center; gap: 24px; padding-block: 14px; position: relative; }
+.menu-more { display: none; }
 .mark { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; letter-spacing: .04em; display: flex; align-items: center; gap: 10px; text-decoration: none; flex: none; }
 .mark i { display: inline-block; width: 30px; height: 18px; position: relative; }
 .mark i::before, .mark i::after { content: ""; position: absolute; top: 0; width: 18px; height: 18px; border: 2px solid var(--gold); border-radius: 50%; }
@@ -88,6 +89,19 @@ a { color: inherit; }
 .kakao-row { display: grid; gap: 8px; margin-top: 22px; justify-items: start; }
 .kakao-row .btn { padding: 15px 22px; font-size: 1rem; }
 .kakao-row small { font-size: .85rem; opacity: .75; }
+/* 공유 */
+.share-mini { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 16px; font-size: .9rem; }
+.share-mini button { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.share-mini button:hover { color: var(--ink); }
+.share-mini button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.share-mini svg, .share .btn svg { width: 17px; height: 17px; flex: none; }
+.share { margin-top: 28px; padding: 28px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; }
+.share > div { min-width: 0; }
+.share h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; }
+.share p { color: var(--muted); font-size: .92rem; margin-top: 4px; }
+.share .btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 12px); z-index: 30; background: var(--ink); color: var(--bg); padding: 12px 18px; border-radius: 6px; font-size: .92rem; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; max-width: calc(100% - 36px); text-align: center; }
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
 
 /* 첫 화면 */
 .hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; padding-block: 64px 80px; }
@@ -272,6 +286,11 @@ details p a { color: var(--gold); }
   .menu { order: 3; width: 100%; margin: 10px -20px 0; padding: 0 20px 10px; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .menu::-webkit-scrollbar { display: none; }
   .menu a { padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: .85rem; background: var(--surface); }
+  /* 옆에 메뉴가 더 있다는 표시: 오른쪽 끝 흐림 + 화살표 (끝까지 밀면 사라짐) */
+  .menu { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 72px), transparent calc(100% - 8px)); mask-image: linear-gradient(to right, #000 calc(100% - 72px), transparent calc(100% - 8px)); }
+  .menu.at-end { -webkit-mask-image: none; mask-image: none; }
+  .menu-more { display: grid; place-items: center; position: absolute; right: -6px; bottom: 12px; width: 28px; height: 28px; border-radius: 50%; background: var(--surface); border: 1px solid var(--line); color: var(--gold); font-size: 1.1rem; line-height: 1; pointer-events: none; transition: opacity .2s; }
+  .menu.at-end + .menu-more { opacity: 0; }
   .record, .contact { grid-template-columns: 1fr; }
   /* 봉투 그림을 제목 옆에: 글 상자를 풀어 제목과 그림만 한 줄에 */
   .hero { grid-template-columns: minmax(0, 1fr) auto; column-gap: 20px; row-gap: 0; align-items: center; padding-block: 36px 60px; }
@@ -344,6 +363,9 @@ details p a { color: var(--gold); }
   summary .cat { display: none; }
   .contact { padding: 26px 18px; }
   .contact h2 { font-size: 1.4rem; }
+  .share { padding: 22px 18px; }
+  .share .btns { width: 100%; }
+  .share .btn { flex: 1 1 0; padding-inline: 10px; }
   .top .kt { display: none; }
   .top .btn.kakao { padding-inline: 11px; }
   .contact h2 br, .sec-head h2 br { display: none; }
@@ -377,6 +399,7 @@ details p a { color: var(--gold); }
         <a href="#plans">구성과 요금</a>
         <a href="#faq">자주 묻는 질문</a>
       </nav>
+      <span class="menu-more" aria-hidden="true">›</span>
       <div class="top-btns">
         <a class="btn small" href="#contact">상담 신청</a>
         <a class="btn small kakao" href="https://open.kakao.com/o/spj9wmSi" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3.5c-5 0-9 3.1-9 7 0 2.5 1.7 4.7 4.2 6l-1 3.6c-.1.3.3.6.6.4l4.3-2.8c.3 0 .6.1.9.1 5 0 9-3.1 9-7s-4-7.3-9-7.3z"/></svg><span class="kt">카톡 상담</span></a>
@@ -402,6 +425,10 @@ details p a { color: var(--gold); }
       <div class="cta">
         <a class="btn" href="#contact">예식일 상담하기</a>
         <a class="btn ghost" href="#plans">구성과 요금 보기</a>
+      </div>
+      <div class="share-mini">
+        <button type="button" data-share><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3.5c-5 0-9 3.1-9 7 0 2.5 1.7 4.7 4.2 6l-1 3.6c-.1.3.3.6.6.4l4.3-2.8c.3 0 .6.1.9.1 5 0 9-3.1 9-7s-4-7.3-9-7.3z"/></svg>카톡으로 공유하기</button>
+        <button type="button" data-copy><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>링크 복사</button>
       </div>
     </div>
 
@@ -701,9 +728,20 @@ details p a { color: var(--gold); }
         <p class="done" id="done" hidden></p>
       </form>
     </div>
+    <div class="share">
+      <div>
+        <h3>결혼 준비하는 친구에게 알려 주세요</h3>
+        <p>링크를 보내면 이 페이지가 그대로 열립니다.</p>
+      </div>
+      <div class="btns">
+        <button class="btn kakao" type="button" data-share><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3.5c-5 0-9 3.1-9 7 0 2.5 1.7 4.7 4.2 6l-1 3.6c-.1.3.3.6.6.4l4.3-2.8c.3 0 .6.1.9.1 5 0 9-3.1 9-7s-4-7.3-9-7.3z"/></svg>카톡으로 공유하기</button>
+        <button class="btn ghost" type="button" data-copy><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>링크 복사</button>
+      </div>
+    </div>
   </section>
 </div>
 
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <div class="mcta" id="mcta">
   <a class="btn" href="#contact">상담 신청</a>
@@ -716,6 +754,60 @@ details p a { color: var(--gold); }
   var bar = document.getElementById('mcta'), target = document.getElementById('contact');
   if (!bar || !target || !('IntersectionObserver' in window)) return;
   new IntersectionObserver(function (es) { bar.classList.toggle('off', es[0].isIntersecting); }, { threshold: 0.15 }).observe(target);
+})();
+
+// 폰 메뉴 줄: 끝까지 밀면 흐림·화살표 없앰, 처음 한 번 살짝 밀어 보여 줌
+(function () {
+  var m = document.querySelector('.menu');
+  if (!m) return;
+  function check() { m.classList.toggle('at-end', m.scrollLeft + m.clientWidth >= m.scrollWidth - 4); }
+  m.addEventListener('scroll', check, { passive: true });
+  window.addEventListener('resize', check);
+  check();
+  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!still && m.scrollWidth > m.clientWidth + 4) {
+    setTimeout(function () {
+      if (m.scrollLeft > 0) return;
+      m.scrollTo({ left: 48, behavior: 'smooth' });
+      setTimeout(function () { m.scrollTo({ left: 0, behavior: 'smooth' }); }, 650);
+    }, 700);
+  }
+})();
+
+// 공유하기 · 링크 복사
+(function () {
+  var URL_ = 'https://ollyryu.github.io/yubuchukuidae/';
+  var TITLE = '부부축의대 · 결혼한 부부가 지키는 축의대';
+  var toast = document.getElementById('toast'), timer;
+  function say(msg) {
+    toast.textContent = msg; toast.classList.add('on');
+    clearTimeout(timer); timer = setTimeout(function () { toast.classList.remove('on'); }, 2600);
+  }
+  function copy(then) {
+    function fallback() {
+      var t = document.createElement('textarea'); t.value = URL_; t.setAttribute('readonly', '');
+      t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(t); then(ok);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(URL_).then(function () { then(true); }, fallback);
+    else fallback();
+  }
+  document.querySelectorAll('[data-copy]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      copy(function (ok) { say(ok ? '링크를 복사했습니다.' : '복사하지 못했습니다. 주소: ' + URL_); });
+    });
+  });
+  document.querySelectorAll('[data-share]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      // 폰: 공유 창에서 카카오톡 선택 / 공유 창이 없는 PC 등은 링크 복사로 대신
+      if (navigator.share) {
+        navigator.share({ title: TITLE, url: URL_ }).catch(function () {});
+      } else {
+        copy(function (ok) { say(ok ? '링크를 복사했습니다. 카카오톡 대화창에 붙여 넣어 보내 주세요.' : '주소: ' + URL_); });
+      }
+    });
+  });
 })();
 
 // 자주 묻는 질문 분류 탭
