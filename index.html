@@ -26,6 +26,8 @@
   --font-display: "Nanum Myeongjo", "Batang", "AppleMyungjo", serif;
   --font-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "Consolas", monospace;
+  --kakao: #fee500;     /* 카카오 노랑 (두 테마 공통) */
+  --kakao-ink: #191919;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -70,6 +72,12 @@ a { color: inherit; }
 }
 .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
 .btn.small { padding: 10px 16px; font-size: .88rem; flex: none; }
+.btn.kakao { background: var(--kakao); color: var(--kakao-ink); }
+.btn.kakao svg { width: 18px; height: 18px; flex: none; }
+.top-btns { display: flex; gap: 8px; flex: none; }
+.kakao-row { display: grid; gap: 8px; margin-top: 22px; justify-items: start; }
+.kakao-row .btn { padding: 15px 22px; font-size: 1rem; }
+.kakao-row small { font-size: .85rem; opacity: .75; }
 
 /* 첫 화면 */
 .hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; padding-block: 64px 80px; }
@@ -185,8 +193,10 @@ tr:last-child td { border-bottom: 0; }
 .plan li::before { content: "·"; color: var(--gold); font-weight: 700; margin-right: 8px; }
 .plan .price { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; border-top: 1px solid var(--line); padding-top: 16px; font-variant-numeric: tabular-nums; }
 .plan .price .amt { font-size: 2.6rem; line-height: 1; margin-right: 4px; color: var(--ink); }
-.plan .low { color: var(--muted); font-size: .92rem; }
-.plan .low b { color: var(--gold); }
+.plan .price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
+.plan .price del { color: var(--muted); font-size: 1.05rem; font-weight: 700; text-decoration-thickness: 2px; text-decoration-color: var(--hong); }
+.plan .price .now { color: var(--ink); }
+.plan .low { color: var(--hong); font-size: .88rem; font-weight: 700; margin-top: -6px; }
 .disc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 16px; border: 1px dashed var(--gold); border-radius: 6px; }
 .disc > div { min-width: 0; padding: 18px 20px; display: grid; gap: 2px; align-content: start; border-right: 1px dashed var(--gold-soft); }
 .disc > div:last-child { border-right: 0; }
@@ -236,12 +246,6 @@ details p a { color: var(--gold); }
 .contact .btn { background: var(--gold); color: var(--on-gold); margin-top: 6px; }
 .done { font-size: .9rem; color: var(--gold-soft); }
 
-footer { padding-block: 40px 56px; color: var(--muted); font-size: .85rem; display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 24px; border-top: 1px solid var(--line); margin-top: 80px; }
-footer > div { min-width: 0; display: grid; gap: 6px; align-content: start; }
-footer b { color: var(--ink); font-weight: 700; }
-footer .fmark { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--ink); }
-footer a { text-decoration: none; }
-footer a:hover { color: var(--ink); }
 
 .mcta {
   display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; gap: 8px; align-items: center;
@@ -249,6 +253,7 @@ footer a:hover { color: var(--ink); }
   transition: transform .2s ease;
 }
 .mcta .btn { flex: 1; padding-block: 15px; font-size: 1rem; background: var(--gold); color: var(--on-gold); }
+.mcta .btn.kakao { background: var(--kakao); color: var(--kakao-ink); }
 .mcta span { font-size: .78rem; color: var(--muted); line-height: 1.35; flex: none; }
 .mcta.off { transform: translateY(110%); }
 @media (max-width: 900px) {
@@ -282,7 +287,6 @@ footer a:hover { color: var(--ink); }
   .policy > div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
   .contact { padding: 30px 22px; }
   section.block { padding-block: 60px; }
-  footer { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
   html { scroll-padding-top: 118px; }
@@ -330,8 +334,9 @@ footer a:hover { color: var(--ink); }
   summary .cat { display: none; }
   .contact { padding: 26px 18px; }
   .contact h2 { font-size: 1.4rem; }
+  .top .kt { display: none; }
+  .top .btn.kakao { padding-inline: 11px; }
   .contact h2 br, .sec-head h2 br { display: none; }
-  footer { margin-top: 48px; padding-block: 32px 24px; }
 
   /* 폰 아래 고정 상담 버튼 */
   .mcta { display: flex; }
@@ -362,7 +367,10 @@ footer a:hover { color: var(--ink); }
         <a href="#plans">구성과 요금</a>
         <a href="#faq">자주 묻는 질문</a>
       </nav>
-      <a class="btn small" href="#contact">상담 신청</a>
+      <div class="top-btns">
+        <a class="btn small" href="#contact">상담 신청</a>
+        <a class="btn small kakao" href="https://open.kakao.com/o/spj9wmSi" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3.5c-5 0-9 3.1-9 7 0 2.5 1.7 4.7 4.2 6l-1 3.6c-.1.3.3.6.6.4l4.3-2.8c.3 0 .6.1.9.1 5 0 9-3.1 9-7s-4-7.3-9-7.3z"/></svg><span class="kt">카톡 상담</span></a>
+      </div>
     </header>
   </div>
 </div>
@@ -380,7 +388,6 @@ footer a:hover { color: var(--ink); }
         <li>두 사람이 이중 확인</li>
         <li>축의대마다 카메라 2대</li>
         <li>당일 엑셀 장부</li>
-        <li>계약서 · 현금영수증</li>
       </ul>
       <div class="cta">
         <a class="btn" href="#contact">예식일 상담하기</a>
@@ -528,7 +535,7 @@ footer a:hover { color: var(--ink); }
       </div>
       <div class="mode">
         <span class="k">선택</span>
-        <h3>밀봉형 <small style="font-family:var(--font-body);font-weight:700;font-size:.8rem;color:var(--hong)">5만 원 할인</small></h3>
+        <h3>밀봉형 <small style="font-family:var(--font-body);font-weight:700;font-size:.8rem;color:var(--hong)">10% 할인</small></h3>
         <p>봉투를 열지 않고 번호와 성함만 기록해 봉투째 봉인해 드립니다. 금액은 신랑신부께서 직접 확인하실 때 고르는 방식입니다.</p>
       </div>
     </div>
@@ -542,7 +549,7 @@ footer a:hover { color: var(--ink); }
     <ol class="flow">
       <li><span class="d">상담</span><b>예식 정보 알려 주기</b><span>아래 상담 신청에 예식일, 시간, 예식장, 홀을 남겨 주세요.</span></li>
       <li><span class="d">계약</span><b>계약금으로 예약 확정</b><span>견적을 확인하시고 계약서를 쓴 뒤 계약금을 내시면 확정됩니다.</span></li>
-      <li><span class="d">D-7</span><b>준비 사항 확인</b><span>사전 미팅을 통해 인사드리고, 인수자와 식권 수량 등 체크리스트를 함께 확인합니다.</span></li>
+      <li><span class="d">D-7</span><b>준비 사항 확인</b><span>사전 미팅을 통해 인사드리고, 인수자와 봉투당 식권 기준 등 체크리스트를 함께 확인합니다.</span></li>
       <li><span class="d">D-1</span><b>최종 확인</b><span>예식 시간, 장소, 홀, 인수자를 마지막으로 한 번 더 확인합니다. 계좌로 받으신 축의금 내역도 이때 주세요.</span></li>
       <li><span class="d">D-Day</span><b>축의대 운영</b><span>예식 1시간 30분 전 도착해 준비하고, 정산과 인계까지 마칩니다.</span></li>
     </ol>
@@ -566,7 +573,7 @@ footer a:hover { color: var(--ink); }
     <div class="cases">
       <div class="case"><div class="q">혼주 친척인데 봉투는 제가 받을게요</div><p class="a">봉투는 축의대에서만 받습니다. 명찰과 안내판으로 공식 접수처를 알리고, 혼주께 직접 확인하기 전에는 누구에게도 넘기지 않습니다.</p></div>
       <div class="case"><div class="q">10만 원 넣으려다 20만 원 넣었어요, 돌려주세요</div><p class="a">그 자리에서 현금을 내드리지 않습니다. 성함과 연락처를 받아 두고, 영상과 장부로 확인한 뒤 신랑신부께서 처리하시도록 전해 드립니다.</p></div>
-      <div class="case"><div class="q">아까 냈어요, 식권 하나만 더 주세요</div><p class="a">식권은 장부에 적힌 수만큼만 드립니다. 이미 받으셨는지는 장부와 영상으로 바로 확인합니다.</p></div>
+      <div class="case"><div class="q">아까 냈어요, 식권 하나만 더 주세요</div><p class="a">성함을 여쭤 장부에서 바로 찾습니다. 적힌 식권 수보다 덜 받으셨으면 그 자리에서 드리고, 이미 받으셨거나 장부에 성함이 없으면 혼주께 확인한 뒤 드립니다. 봉투 하나에 식권을 몇 장 드릴지는 사전 미팅 때 미리 정해 둡니다.</p></div>
       <div class="case"><div class="q">예식장 직원인데 식대 중간정산 하실게요</div><p class="a">예식 중에는 어떤 정산도 하지 않습니다. 축의금은 예식이 끝난 뒤 정해진 분께만 인계합니다.</p></div>
     </div>
   </section>
@@ -600,23 +607,23 @@ footer a:hover { color: var(--ink); }
         <span class="k">한쪽 축의대</span>
         <h3>신랑측 또는 신부측</h3>
         <p class="who">부부 한 쌍 · 카메라 2대 · 하객 180명까지</p>
-        <div class="price"><span class="amt">40</span>만 원</div>
-        <p class="low">할인을 모두 받으시면 <b>27만 원</b></p>
+        <div class="price"><del>40만 원</del><span class="now"><span class="amt">28</span>만 원</span></div>
+        <p class="low">모든 할인 적용 시</p>
       </div>
       <div class="plan main">
         <span class="k">양가 모두</span>
         <h3>신랑측과 신부측</h3>
         <p class="who">부부 두 쌍 · 카메라 4대 · 양가 합쳐 하객 350명까지</p>
-        <div class="price"><span class="amt">70</span>만 원</div>
-        <p class="low">할인을 모두 받으시면 <b>57만 원</b></p>
+        <div class="price"><del>70만 원</del><span class="now"><span class="amt">55</span>만 원</span></div>
+        <p class="low">모든 할인 적용 시</p>
       </div>
     </div>
     <div class="disc">
       <div><span class="v">−3만 원</span><b>계약 후기</b><span>계약하시고 후기를 남겨 주시면</span></div>
       <div><span class="v">−5만 원</span><b>본식 후기</b><span>예식이 끝난 뒤 후기를 남겨 주시면</span></div>
-      <div><span class="v">−5만 원</span><b>밀봉형 선택</b><span>봉투를 열지 않고 봉인해 받는 방식을 고르시면</span></div>
+      <div><span class="v">−10%</span><b>밀봉형 선택</b><span>봉투를 열지 않고 봉인해 받는 방식을 고르시면 기본 요금의 10%</span></div>
     </div>
-    <p class="extra">하객이 기준 인원(한쪽 180명, 양가 합쳐 350명)을 넘으면 1명당 2,000원이 추가됩니다. 운영 시간이 길어지거나 먼 지역 예식장이면 추가 요금이 있을 수 있습니다. 풀영상은 신청하실 때 따로 안내해 드립니다.</p>
+    <p class="extra">하객이 기준 인원(한쪽 180명, 양가 합쳐 350명)을 넘으면 1명당 2,000원이 추가됩니다. 운영 시간이 길어지면 추가 요금이 있을 수 있습니다. 서울, 수도권 외의 지역은 출장비가 발생할 수 있습니다. 풀영상은 신청하실 때 따로 안내해 드립니다.</p>
   </section>
 
   <section class="block" id="faq">
@@ -633,33 +640,33 @@ footer a:hover { color: var(--ink); }
     </div>
     <div class="faq" id="faq-list">
       <details data-cat="예약"><summary><span class="cat">예약</span>언제까지 예약해야 하나요?</summary><p>예식 2주 전까지는 예약해 주세요. 하루에 맡는 예식 수가 정해져 있어서, 주말 성수기는 1~2개월 전에 문의하시는 게 좋습니다.</p></details>
-      <details data-cat="예약"><summary><span class="cat">예약</span>예약은 어떻게 확정되나요?</summary><p>상담 신청을 남기시면 연락드려 견적을 안내합니다. 계약서를 쓰고 계약금을 내시면 예약이 확정됩니다.</p></details>
-      <details data-cat="예약"><summary><span class="cat">예약</span>취소하면 환불되나요?</summary><p>취소 시점에 따라 돌려드리는 금액이 다릅니다. 자세한 기준은 계약하실 때 계약서로 안내해 드립니다. 저희 사정으로 못 나가게 되면 전액 환불에 더해 배상해 드립니다.</p></details>
-      <details data-cat="예약"><summary><span class="cat">예약</span>예식 날짜나 장소가 바뀌면요?</summary><p>바뀐 내용을 바로 알려 주세요. 담당 부부 일정이 맞으면 그대로 옮겨 드립니다.</p></details>
+      <details data-cat="예약"><summary><span class="cat">예약</span>예약은 어떻게 확정되나요?</summary><p>상담 → 계약서 작성 → 계약금 입금, 세 단계면 끝납니다. 상담 신청이나 카카오톡으로 예식 정보를 알려 주시면 일정과 견적을 안내해 드립니다. 내용을 확인하신 뒤 계약서를 쓰고 계약금을 보내 주시면 그때 예약이 확정됩니다.</p></details>
+      <details data-cat="예약"><summary><span class="cat">예약</span>취소하면 환불되나요?</summary><p>취소 시점에 따라 돌려드리는 금액이 다릅니다. 자세한 기준은 계약하실 때 계약서로 안내해 드립니다.</p></details>
       <details data-cat="예약"><summary><span class="cat">예약</span>한쪽 축의대만 맡길 수도 있나요?</summary><p>네. 신랑측, 신부측, 양가 모두 중에서 고르실 수 있습니다. 축의대 한 곳마다 부부 한 쌍이 맡습니다.</p></details>
       <details data-cat="당일"><summary><span class="cat">당일</span>몇 시에 도착하나요?</summary><p>예식 1시간 30분 전에 도착해 식권을 받고, 안내판과 카메라를 설치합니다.</p></details>
       <details data-cat="당일"><summary><span class="cat">당일</span>어떤 차림으로 오나요?</summary><p>예식에 어울리는 정장 차림으로 갑니다. 명찰을 달아 하객분들이 공식 접수처임을 알아보실 수 있게 합니다.</p></details>
-      <details data-cat="당일"><summary><span class="cat">당일</span>모르는 사람이 앉아 있으면 하객분들이 어색해하지 않을까요?</summary><p>저희도 결혼식에서 하객을 맞아 본 부부입니다. 혼주를 대신해 인사드리고, 어르신 동선과 식권 안내까지 챙깁니다. 원하시면 청첩장에 "축의대는 부부축의대가 함께합니다" 안내 문구를 넣어 드립니다.</p></details>
-      <details data-cat="당일"><summary><span class="cat">당일</span>담당 부부가 갑자기 못 오게 되면요?</summary><p>먼저 바로 알려 드리고, 같은 조건의 다른 부부를 보내 드립니다. 받아들이기 어려우시면 전액 환불과 배상으로 처리합니다.</p></details>
       <details data-cat="당일"><summary><span class="cat">당일</span>축의대 영상을 실시간으로 볼 수 있나요?</summary><p>네. 축의대 카메라 화면을 비공개 링크로 실시간 보내 드립니다. 링크는 신랑신부와 지정하신 가족에게만 드리고, 예식이 끝나면 닫습니다.</p></details>
       <details data-cat="당일"><summary><span class="cat">당일</span>예식 중에 접수 현황을 볼 수 있나요?</summary><p>원하시면 접수 현황과 누적 금액을 휴대폰으로 볼 수 있게 공유해 드립니다.</p></details>
       <details data-cat="당일"><summary><span class="cat">당일</span>웨딩홀에서 카메라를 설치해도 되나요?</summary><p>홀마다 규정이 달라 예약하실 때 저희가 먼저 확인합니다. 테이블에 다는 작은 거치대를 써서 자리를 거의 차지하지 않습니다.</p></details>
       <details data-cat="기록·영상"><summary><span class="cat">기록·영상</span>장부에는 무엇이 적히나요?</summary><p>봉투 번호, 성함, 관계, 금액, 식권 수입니다. 신랑측과 신부측을 따로 정리해 엑셀로 그날 바로 보내 드립니다.</p></details>
-      <details data-cat="기록·영상"><summary><span class="cat">기록·영상</span>봉투를 열지 않고 그대로 받을 수도 있나요?</summary><p>네. 밀봉형을 고르시면 봉투를 열지 않고 번호와 성함만 기록해 봉투째 봉인해 드립니다. 이 방식은 요금에서 5만 원을 더 할인해 드립니다.</p></details>
+      <details data-cat="기록·영상"><summary><span class="cat">기록·영상</span>봉투를 열지 않고 그대로 받을 수도 있나요?</summary><p>네. 밀봉형을 고르시면 봉투를 열지 않고 번호와 성함만 기록해 봉투째 봉인해 드립니다. 이 방식은 기본 요금에서 10%를 더 할인해 드립니다.</p></details>
       <details data-cat="기록·영상"><summary><span class="cat">기록·영상</span>계좌로 보낸 축의금도 장부에 넣을 수 있나요?</summary><p>축의대에서 직접 받은 현금만 맡습니다. 계좌로 받으신 내역은 예식 전날까지 주시면, 당일 현금 장부와 합쳐 하나의 엑셀로 정리해 드립니다.</p></details>
       <details data-cat="기록·영상"><summary><span class="cat">기록·영상</span>영상은 어떻게 받나요?</summary><p>기본으로는 궁금한 봉투의 장면을 찾아 보여 드립니다. 풀영상을 신청하시면 기간이 정해진 비공개 링크로 보내 드립니다.</p></details>
       <details data-cat="기록·영상"><summary><span class="cat">기록·영상</span>영상은 언제 지우나요?</summary><p>예식 뒤 30일이 지나면 되살릴 수 없게 지우고 알려 드립니다. 요청하시면 그 전에 바로 지웁니다. 다툼이 있어 확인이 필요한 부분만 그 일이 끝날 때까지 보관합니다.</p></details>
       <details data-cat="기타"><summary><span class="cat">기타</span>현금영수증이나 세금계산서를 받을 수 있나요?</summary><p>네. 요청하시면 발행해 드립니다.</p></details>
-      <details data-cat="기타"><summary><span class="cat">기타</span>지방 결혼식도 가능한가요?</summary><p>가능합니다. 지역과 일정에 따라 출장비가 붙을 수 있어 상담 때 따로 견적을 드립니다.</p></details>
+      <details data-cat="기타"><summary><span class="cat">기타</span>지방 결혼식도 가능한가요?</summary><p>가능합니다. 서울, 수도권 외의 지역은 출장비가 발생할 수 있어 상담 때 따로 견적을 드립니다.</p></details>
     </div>
-    <p class="more">찾으시는 답이 없으면 <a href="#contact">상담 신청</a>에 남겨 주세요. 연락드려 답해 드립니다.</p>
+    <p class="more">찾으시는 답이 없으면 <a href="https://open.kakao.com/o/spj9wmSi" target="_blank" rel="noopener">카카오톡 상담</a>으로 물어보시거나 <a href="#contact">상담 신청</a>에 남겨 주세요.</p>
   </section>
 
   <section class="block" id="contact">
     <div class="contact">
       <div>
         <h2>예식 날짜와 장소만 알려 주시면<br>부부의 일정을 먼저 맞춰 둘게요</h2>
-        <p>기본 요금은 한쪽 축의대 40만 원, 양가 모두 70만 원입니다. 하루에 맡는 예식 수가 정해져 있어 일찍 문의하실수록 좋습니다.</p>
+        <p>하루에 맡는 예식 수가 정해져 있어 일찍 문의하실수록 좋습니다.</p>
+        <div class="kakao-row">
+          <a class="btn kakao" href="https://open.kakao.com/o/spj9wmSi" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3.5c-5 0-9 3.1-9 7 0 2.5 1.7 4.7 4.2 6l-1 3.6c-.1.3.3.6.6.4l4.3-2.8c.3 0 .6.1.9.1 5 0 9-3.1 9-7s-4-7.3-9-7.3z"/></svg>카카오톡으로 바로 상담하기</a>
+        </div>
       </div>
       <form id="ask" novalidate>
         <fieldset class="side">
@@ -687,30 +694,10 @@ footer a:hover { color: var(--ink); }
   </section>
 </div>
 
-<div class="wrap">
-  <footer>
-    <div>
-      <span class="fmark">부부축의대</span>
-      <span>결혼한 부부가 지키는 축의대</span>
-    </div>
-    <div>
-      <b>바로가기</b>
-      <a href="#service">서비스</a>
-      <a href="#plans">구성과 요금</a>
-      <a href="#faq">자주 묻는 질문</a>
-    </div>
-    <div>
-      <b>문의</b>
-      <span>홈페이지 상담 신청</span>
-      <span>인스타그램 · 유튜브 준비 중</span>
-      <span>사업자 정보 준비 중</span>
-    </div>
-  </footer>
-</div>
 
 <div class="mcta" id="mcta">
-  <span>한쪽 40만 원<br>양가 70만 원</span>
   <a class="btn" href="#contact">상담 신청</a>
+  <a class="btn kakao" href="https://open.kakao.com/o/spj9wmSi" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3.5c-5 0-9 3.1-9 7 0 2.5 1.7 4.7 4.2 6l-1 3.6c-.1.3.3.6.6.4l4.3-2.8c.3 0 .6.1.9.1 5 0 9-3.1 9-7s-4-7.3-9-7.3z"/></svg>카톡 상담</a>
 </div>
 
 <script>
