@@ -257,9 +257,15 @@ footer a:hover { color: var(--ink); }
   .menu { order: 3; width: 100%; margin: 10px -20px 0; padding: 0 20px 10px; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .menu::-webkit-scrollbar { display: none; }
   .menu a { padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: .85rem; background: var(--surface); }
-  .hero, .record, .contact { grid-template-columns: 1fr; }
-  .hero { gap: 36px; padding-block: 36px 60px; }
-  .stage svg { max-width: 280px; }
+  .record, .contact { grid-template-columns: 1fr; }
+  /* 봉투 그림을 제목 옆에: 글 상자를 풀어 제목과 그림만 한 줄에 */
+  .hero { grid-template-columns: minmax(0, 1fr) auto; column-gap: 20px; row-gap: 0; align-items: center; padding-block: 36px 60px; }
+  .hero > div:first-child { display: contents; }
+  .hero > div:first-child > * { grid-column: 1 / -1; }
+  .hero .eyebrow { grid-row: 1; }
+  .hero h1 { grid-column: 1; grid-row: 2; }
+  .stage { grid-column: 2; grid-row: 2; align-self: center; }
+  .stage svg { width: clamp(100px, 25vw, 190px); max-width: none; }
   .svc { grid-template-columns: 1fr 1fr; }
   .why { grid-template-columns: 1fr 1fr; gap: 28px; }
   .flow { grid-template-columns: 1fr 1fr; }
@@ -286,15 +292,14 @@ footer a:hover { color: var(--ink); }
   .mark { font-size: 1.2rem; }
 
   /* 첫 화면: 글 먼저, 봉투 그림은 작게 */
-  .hero { gap: 24px; padding-block: 28px 44px; }
-  .hero h1 { font-size: 2.15rem; margin-block: 12px 18px; }
+  .hero { column-gap: 12px; padding-block: 24px 44px; }
+  .hero h1 { font-size: 1.95rem; margin-block: 12px 18px; }
   .lead { font-size: 1.02rem; }
   .lead + .lead { font-size: .95rem; }
   .chips { gap: 6px; margin-top: 18px; }
   .chips li { font-size: .8rem; padding: 5px 10px; }
   .cta { margin-top: 22px; }
   .cta .btn { flex: 1 1 0; padding-inline: 12px; }
-  .stage svg { max-width: 170px; }
 
   section.block { padding-block: 48px; }
   .sec-head { margin-bottom: 26px; gap: 8px; }
